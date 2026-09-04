@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Community Lending Platform</title>
+  <style>
+    :root {
+      --bg-main: #0c332b;
+      --card-bg: #13463b;
+      --card-border: #1d5c4f;
+      --text-white: #ffffff;
+      --text-muted: #a3e635;
+      --text-sub: #94a3b8;
+      --accent-gold: #f59e0b;
+      --accent-green: #22c55e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-white);
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .hero-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .tagline {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-title span {
+      color: var(--accent-green);
+    }
+
+    .hero-desc {
+      font-size: 1rem;
+      color: #cbd5e1;
+      margin-bottom: 1.75rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-top: 2rem;
+    }
+
+    .stat-box {
+      text-align: left;
+    }
+
+    .stat-value {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--accent-gold);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      margin-top: 0.25rem;
+    }
+
+    .calculator-card {
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--card-border);
+      padding: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .calculator-card h3 {
+      font-size: 1.35rem;
+      text-align: center;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-sub);
+      margin-bottom: 0.5rem;
+    }
+
+    .currency-selector {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .currency-btn {
+      flex: 1;
+      padding: 0.5rem;
+      background: var(--bg-main);
+      border: 1px solid var(--card-border);
+      color: var(--text-white);
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .currency-btn.active {
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+    }
+
+    .amount-display {
+      font-size: 2rem;
+      font-weight: 800;
+      text-align: center;
+      color: var(--accent-green);
+      margin: 0.5rem 0;
+    }
+
+    .range-slider {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: var(--bg-main);
+      outline: none;
+      accent-color: var(--accent-green);
+      cursor: pointer;
+    }
+
+    .range-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      margin-top: 0.25rem;
+    }
+
+    .term-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+
+    .term-btn {
+      padding: 0.6rem;
+      background: var(--bg-main);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      font-weight: 600;
+      color: var(--text-white);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .term-btn.active {
+      background-color: var(--accent-green);
+      color: #000000;
+      border-color: var(--accent-green);
+    }
+
+    .summary-box {
+      background-color: var(--bg-main);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .summary-title {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .summary-amount {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent-green);
+      margin: 0.25rem 0;
+    }
+
+    .summary-details {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px dashed var(--card-border);
+      font-size: 0.8rem;
+      color: var(--text-sub);
+    }
+
+    .rate-info {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      margin-top: 0.5rem;
+    }
+
+    .btn-apply {
+      width: 100%;
+      background-color: var(--accent-gold);
+      color: #000000;
+      border: none;
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+
+    .btn-apply:hover {
+      opacity: 0.9;
+    }
+
+    .process-section h3 {
+      font-size: 1.35rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .step-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .step-number {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .step-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .step-desc {
+      font-size: 0.875rem;
+      color: #cbd5e1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="hero-section">
+      <div class="tagline">zambia lending in partnership with momo</div>
+      <h1 class="hero-title">Steady ground<br>for your <span>next step.</span></h1>
+      <p class="hero-desc">
+        Apply in minutes, and track every application from one dashboard — built for entrepreneurs and households across all 26 provinces of the Democratic Republic of Congo.
+      </p>
+
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-value">24h</div>
+          <div class="stat-label">Typical review time</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="statRange">ZMW 500 – ZMW 20,000</div>
+          <div class="stat-label">Loan range</div>
+        </div>
+      </div>
+    </div>
+
+    <form action="loan.html" method="GET" class="calculator-card">
+      <h3>Loan Estimate Calculator</h3>
+      <p class="subtitle">Calculate expected payments in real-time</p>
+
+      <div class="form-group">
+        <label>Select Currency</label>
+        <div class="currency-selector">
+          <button type="button" class="currency-btn active" onclick="setCurrency('ZMW', this)">ZMW (Kwacha)</button>
+          <button type="button" class="currency-btn" onclick="setCurrency('CDF', this)">CDF (Franc)</button>
+        </div>
+        <input type="hidden" name="currency" id="hiddenCurrency" value="ZMW">
+      </div>
+
+      <div class="form-group">
+        <label for="loanAmount">Loan Amount</label>
+        <div class="amount-display" id="amountVal">ZMW 1,000</div>
+        <input type="range" id="loanAmount" name="loanAmount" class="range-slider" min="500" max="20000" step="250" value="1000">
+        <div class="range-labels">
+          <span id="minLabel">ZMW 500</span>
+          <span id="maxLabel">ZMW 20,000</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Loan Term</label>
+        <div class="term-grid">
+          <button type="button" class="term-btn" onclick="selectTerm(6, this)">6 Mos</button>
+          <button type="button" class="term-btn active" onclick="selectTerm(12, this)">12 Mos</button>
+          <button type="button" class="term-btn" onclick="selectTerm(24, this)">24 Mos</button>
+        </div>
+        <input type="hidden" name="termMonths" id="hiddenTermMonths" value="12">
+      </div>
+
+      <div class="summary-box">
+        <div class="summary-title">Estimated Monthly Payment</div>
+        <div class="summary-amount" id="monthlyVal">ZMW 85.61</div>
+        <div class="summary-details">
+          <span>Total Repayment: <strong id="totalVal" style="color: #fff;">ZMW 1,027.29</strong></span>
+          <span>Interest: <strong id="interestVal" style="color: #fff;">ZMW 27.29</strong></span>
+        </div>
+        <div class="rate-info">Calculated at 5% annual interest rate</div>
+      </div>
+
+      <button type="submit" class="btn-apply">Apply Now</button>
+    </form>
+
+    <div class="process-section">
+      <h3>How It Works</h3>
+      <div class="step-card">
+        <div class="step-number">01</div>
+        <div class="step-title">Calculate</div>
+        <div class="step-desc">Select your desired loan amount and repayment period to view estimated schedules.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-number">02</div>
+        <div class="step-title">Apply</div>
+        <div class="step-desc">Tell us the amount, purpose, and repayment term you need.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-number">03</div>
+        <div class="step-title">Review</div>
+        <div class="step-desc">We check your application and reach out if we need more.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-number">04</div>
+        <div class="step-title">Receive funds</div>
+        <div class="step-desc">Approved funds are sent to the contact you provide.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const annualInterestRate = 0.05;
+    let selectedMonths = 12;
+    let currentCurrency = 'ZMW';
+    const cdfRate = 100;
+
+    const amountSlider = document.getElementById('loanAmount');
+    const amountValDisplay = document.getElementById('amountVal');
+    const monthlyValDisplay = document.getElementById('monthlyVal');
+    const totalValDisplay = document.getElementById('totalVal');
+    const interestValDisplay = document.getElementById('interestVal');
+    const hiddenCurrencyInput = document.getElementById('hiddenCurrency');
+    const hiddenTermInput = document.getElementById('hiddenTermMonths');
+
+    function setCurrency(currency, element) {
+      currentCurrency = currency;
+      hiddenCurrencyInput.value = currency;
+      
+      document.querySelectorAll('.currency-btn').forEach(btn => btn.classList.remove('active'));
+      element.classList.add('active');
+      
+      const minVal = currentCurrency === 'CDF' ? 500 * cdfRate : 500;
+      const maxVal = currentCurrency === 'CDF' ? 20000 * cdfRate : 20000;
+      
+      document.getElementById('minLabel').innerText = `${currentCurrency} ${minVal.toLocaleString()}`;
+      document.getElementById('maxLabel').innerText = `${currentCurrency} ${maxVal.toLocaleString()}`;
+      
+      calculatePayment();
+    }
+
+    function calculatePayment() {
+      let principal = parseFloat(amountSlider.value);
+      if (currentCurrency === 'CDF') {
+        principal = principal * cdfRate;
+      }
+
+      const monthlyRate = annualInterestRate / 12;
+      const payment = (principal * monthlyRate * Math.pow(1 + monthlyRate, selectedMonths)) / 
+                      (Math.pow(1 + monthlyRate, selectedMonths) - 1);
+      
+      const totalRepayment = payment * selectedMonths;
+      const totalInterest = totalRepayment - principal;
+
+      amountValDisplay.innerText = `${currentCurrency} ${principal.toLocaleString()}`;
+      monthlyValDisplay.innerText = `${currentCurrency} ${payment.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+      totalValDisplay.innerText = `${currentCurrency} ${totalRepayment.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+      interestValDisplay.innerText = `${currentCurrency} ${totalInterest.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+    }
+
+    function selectTerm(months, element) {
+      selectedMonths = months;
+      hiddenTermInput.value = months;
+      document.querySelectorAll('.term-btn').forEach(btn => btn.classList.remove('active'));
+      element.classList.add('active');
+      calculatePayment();
+    }
+
+    amountSlider.addEventListener('input', calculatePayment);
+    calculatePayment();
+  </script>
+</body>
+</html>
