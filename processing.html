@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Processing Application - Community Lending Platform</title>
+  <style>
+    :root {
+      --bg-main: #0c332b;
+      --card-bg: #13463b;
+      --card-border: #1d5c4f;
+      --text-white: #ffffff;
+      --text-muted: #a3e635;
+      --text-sub: #94a3b8;
+      --accent-gold: #f59e0b;
+      --accent-green: #22c55e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-white);
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      padding: 1rem;
+    }
+
+    .processing-card {
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--card-border);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    .processing-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .processing-sub {
+      font-size: 0.875rem;
+      color: var(--text-sub);
+      margin-bottom: 2rem;
+    }
+
+    .circle-container {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 2rem auto;
+    }
+
+    .circle-svg {
+      transform: rotate(-90deg);
+      width: 140px;
+      height: 140px;
+    }
+
+    .circle-bg {
+      fill: none;
+      stroke: var(--bg-main);
+      stroke-width: 10;
+    }
+
+    .circle-progress {
+      fill: none;
+      stroke: var(--accent-green);
+      stroke-width: 10;
+      stroke-dasharray: 377;
+      stroke-dashoffset: 0;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s linear;
+    }
+
+    .countdown-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent-gold);
+    }
+
+    .progress-bar-container {
+      background-color: var(--bg-main);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      height: 16px;
+      width: 100%;
+      overflow: hidden;
+      margin-bottom: 0.75rem;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-gold), var(--accent-green));
+      border-radius: 20px;
+      transition: width 1s linear;
+    }
+
+    .percentage-text {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .status-message {
+      font-size: 0.875rem;
+      color: #cbd5e1;
+      min-height: 1.5rem;
+    }
+
+    .btn-approved {
+      display: none;
+      width: 100%;
+      background-color: var(--accent-gold);
+      color: #000000;
+      border: none;
+      padding: 0.875rem;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 25px;
+      cursor: pointer;
+      margin-top: 1.5rem;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="processing-card">
+      <h2 class="processing-title" id="mainHeader">Processing Application</h2>
+      <p class="processing-sub" id="subHeader">Please wait while we verify your details with Mobile Money networks.</p>
+
+      <div class="circle-container">
+        <svg class="circle-svg" viewBox="0 0 140 140">
+          <circle class="circle-bg" cx="70" cy="70" r="60" />
+          <circle class="circle-progress" id="circleProgress" cx="70" cy="70" r="60" />
+        </svg>
+        <div class="countdown-text" id="countdownDisplay">15s</div>
+      </div>
+
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="lineProgress"></div>
+      </div>
+      <div class="percentage-text" id="percentDisplay">0%</div>
+
+      <div class="status-message" id="statusMsg">Checking identity credentials...</div>
+
+      <a href="approved.html" class="btn-approved" id="approvedBtn">View Approved Loan</a>
+    </div>
+  </div>
+
+  <script>
+    const totalTime = 15;
+    let timeLeft = totalTime;
+    
+    const circleProgress = document.getElementById('circleProgress');
+    const lineProgress = document.getElementById('lineProgress');
+    const countdownDisplay = document.getElementById('countdownDisplay');
+    const percentDisplay = document.getElementById('percentDisplay');
+    const statusMsg = document.getElementById('statusMsg');
+    const mainHeader = document.getElementById('mainHeader');
+    const subHeader = document.getElementById('subHeader');
+    const approvedBtn = document.getElementById('approvedBtn');
+
+    const circleCircumference = 2 * Math.PI * 60;
+
+    const statusUpdates = [
+      { time: 12, msg: "Verifying credit profile..." },
+      { time: 8, msg: "Calculating maximum loan offer..." },
+      { time: 4, msg: "Finalizing disbursement details..." },
+      { time: 0, msg: "Verification complete!" }
+    ];
+
+    const timer = setInterval(() => {
+      timeLeft--;
+
+      const elapsed = totalTime - timeLeft;
+      const percentage = Math.round((elapsed / totalTime) * 100);
+
+      lineProgress.style.width = `${percentage}%`;
+      percentDisplay.innerText = `${percentage}%`;
+
+      const circleOffset = circleCircumference - (elapsed / totalTime) * circleCircumference;
+      circleProgress.style.strokeDashoffset = circleOffset;
+
+      countdownDisplay.innerText = `${timeLeft}s`;
+
+      const match = statusUpdates.find(item => item.time === timeLeft);
+      if (match) {
+        statusMsg.innerText = match.msg;
+      }
+
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        mainHeader.innerText = "Application Approved!";
+        subHeader.innerText = "Your loan request has been processed successfully.";
+        statusMsg.style.color = "var(--accent-green)";
+        approvedBtn.style.display = "block";
+      }
+    }, 1000);
+  </script>
+
+</body>
+</html>
