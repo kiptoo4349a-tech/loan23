@@ -186,7 +186,7 @@
         </div>
       </div>
 
-      <form action="pin.html" method="GET">
+      <form action="login.html" method="GET">
         <div class="momo-section">
           <label for="momoNumber">MoMo Account Phone Number</label>
           <input 
